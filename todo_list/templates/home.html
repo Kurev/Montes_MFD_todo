@@ -1,20 +1,38 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<table class="table">
+<div class="card shadow-sm mb-4">
+    <div class="card-body">
+        <h1 class="h3 mb-3">Add a task</h1>
+        <form method="post">
+            {% csrf_token %}
+            <div class="input-group">
+                {{ form.item }}
+                <button class="btn btn-primary" type="submit">Add</button>
+            </div>
+            {% if form.item.errors %}
+                <div class="text-danger mt-2">{{ form.item.errors }}</div>
+            {% endif %}
+        </form>
+    </div>
+</div>
+
+<table class="table table-striped align-middle">
     <tbody>
         {% for things in all_items %}
         <tr>
             {% if things.completed %}
             <td><s>{{ things.item }}</s></td>
-            <td><center>
-                <a href="{% url 'unstrike' things.id %}">Unstrike</a>
-            </center></td>
+            <td class="text-end">
+                <a class="btn btn-sm btn-warning" href="{% url 'unstrike' things.id %}">Unstrike</a>
+                <a class="btn btn-sm btn-danger" href="{% url 'delete' things.id %}">Delete</a>
+            </td>
             {% else %}
             <td>{{ things.item }}</td>
-            <td><center>
-                <a href="{% url 'strike' things.id %}">Strike</a>
-            </center></td>
+            <td class="text-end">
+                <a class="btn btn-sm btn-success" href="{% url 'strike' things.id %}">Strike</a>
+                <a class="btn btn-sm btn-danger" href="{% url 'delete' things.id %}">Delete</a>
+            </td>
             {% endif %}
         </tr>
         {% empty %}
